@@ -8,6 +8,6 @@
 - Parse articles: ```php artisan article:parse```
 - Clean articles: ```php artisan article:clean```
 
-##Demo
+## Demo
 
 http://parser.mlm-developer.ru/

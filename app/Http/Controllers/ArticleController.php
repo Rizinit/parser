@@ -23,12 +23,7 @@ class ArticleController extends Controller
 
     public function parse()
     {
-        try {
-            Artisan::call('article:parse');
-        } catch (\Exception $exception) {
-            dd($exception);
-        }
-
+        Artisan::call('article:parse');
 
         return redirect()->route('article.index');
     }

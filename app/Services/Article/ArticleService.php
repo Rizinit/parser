@@ -34,7 +34,7 @@ class ArticleService
     /**
      * @param SimplePie_Item $item
      * @param Crawler $article
-     * @return Article|bool
+     * @return Article|null
      */
     public function create(SimplePie_Item $item, Crawler $article)
     {

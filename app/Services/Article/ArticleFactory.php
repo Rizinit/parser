@@ -23,7 +23,7 @@ class ArticleFactory
      * @param string $title
      * @param string $description
      * @param string $content
-     * @return Article|bool
+     * @return Article|null
      */
     public function create(string $guid, string $title, string $description, string $content)
     {
@@ -35,7 +35,7 @@ class ArticleFactory
                 'content' => $this->contentPreparer->content($content),
             ]);
         } catch (\Exception $exception) {
-            return false;
+            return null;
         }
     }
 }
