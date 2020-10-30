@@ -22,7 +22,7 @@ class CreateArticlesTable extends Migration
             $table->id();
             $table->string('guid')->index()->unique();
             $table->string('title')->index();
-            $table->string('description');
+            $table->text('description');
             $table->text('content');
             $table->timestamps();
         });

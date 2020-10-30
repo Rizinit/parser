@@ -5,4 +5,9 @@
 - Configure DB config
 - Run migrations: ```php artisan migrate```
 - Run tests: ```php artisan test```
-- Run parser: ```php artisan parse:articles```
+- Parse articles: ```php artisan article:parse```
+- Clean articles: ```php artisan article:clean```
+
+##Demo
+
+http://parser.mlm-developer.ru/

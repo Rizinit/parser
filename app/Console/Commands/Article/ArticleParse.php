@@ -1,18 +1,18 @@
 <?php
 
-namespace App\Console\Commands;
+namespace App\Console\Commands\Article;
 
 use Illuminate\Console\Command;
-use App\Services\ArticleParserService;
+use App\Services\Article\ArticleParserService;
 
-class ParseArticles extends Command
+class ArticleParse extends Command
 {
     /**
      * The name and signature of the console command.
      *
      * @var string
      */
-    protected $signature = 'parse:articles';
+    protected $signature = 'article:parse';
 
     /**
      * The console command description.
@@ -37,6 +37,10 @@ class ParseArticles extends Command
      */
     public function handle(ArticleParserService $articleParserService)
     {
-        echo  $articleParserService->handle() ? 'Successfully completed!' : 'Command was interrupted. See log for details.';
+        if ($articleParserService->parse()) {
+            $this->info('Successfully completed!');
+        } else {
+            $this->error('Command was interrupted. See log for details.');
+        }
     }
 }

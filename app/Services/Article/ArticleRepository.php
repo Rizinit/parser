@@ -1,10 +1,10 @@
 <?php
 
-namespace App\Services;
+namespace App\Services\Article;
 
 use App\Models\Article;
 
-class ArticleService
+class ArticleRepository
 {
     /**
      * @param string $guid

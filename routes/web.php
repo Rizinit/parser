@@ -14,6 +14,9 @@ use App\Http\Controllers\ArticleController;
 |
 */
 
-Route::get('/', [ArticleController::class, 'index']);
-
-Route::get('article/{id}', [ArticleController::class, 'show']);
+Route::name('article.')->group(function () {
+    Route::get('/', [ArticleController::class, 'index'])->name('index');
+    Route::get('article/parse', [ArticleController::class, 'parse'])->name('parse');
+    Route::get('article/clean', [ArticleController::class, 'clean'])->name('clean');
+    Route::get('article/{article}', [ArticleController::class, 'show'])->name('show');
+});
