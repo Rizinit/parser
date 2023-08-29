@@ -35,7 +35,7 @@ class ArticleClean extends Command
     /**
      * @return void
      */
-    public function handle()
+    public function handle(): void
     {
         $table = app(Article::class)->getTable();
 

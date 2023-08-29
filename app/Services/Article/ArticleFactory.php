@@ -3,21 +3,10 @@
 namespace App\Services\Article;
 
 use App\Models\Article;
-use App\Components\Parser\ContentPreparer;
+use Illuminate\Database\QueryException;
 
 class ArticleFactory
 {
-    /** @var ContentPreparer */
-    private ContentPreparer $contentPreparer;
-
-    /**
-     * @param ContentPreparer $contentPreparer
-     */
-    public function __construct(ContentPreparer $contentPreparer)
-    {
-        $this->contentPreparer = $contentPreparer;
-    }
-
     /**
      * @param string $guid
      * @param string $title
@@ -25,16 +14,16 @@ class ArticleFactory
      * @param string $content
      * @return Article|null
      */
-    public function create(string $guid, string $title, string $description, string $content)
+    public function create(string $guid, string $title, string $description, string $content): ?Article
     {
         try {
             return Article::create([
                 'guid' => $guid,
                 'title' => $title,
-                'description' => $this->contentPreparer->description($description),
-                'content' => $this->contentPreparer->content($content),
+                'description' => $description,
+                'content' => $content,
             ]);
-        } catch (\Exception $exception) {
+        } catch (QueryException) {
             return null;
         }
     }

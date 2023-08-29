@@ -35,7 +35,7 @@ class ArticleParse extends Command
      * @param ArticleParserService $articleParserService
      * @return void
      */
-    public function handle(ArticleParserService $articleParserService)
+    public function handle(ArticleParserService $articleParserService): void
     {
         if ($articleParserService->parse()) {
             $this->info('Successfully completed!');

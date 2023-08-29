@@ -3,44 +3,25 @@
 namespace App\Services\Article;
 
 use SimplePie;
-use Goutte\Client;
 use Illuminate\Support\Facades\Log;
+use Symfony\Component\HttpClient\HttpClient;
+use Symfony\Component\BrowserKit\HttpBrowser;
 use willvincent\Feeds\Facades\FeedsFacade as Feeds;
 
 class ArticleParserService
 {
-    /** @var Client */
-    private Client $client;
+    private const SELECTOR = '.col-content p:not([class])';
+    private const RSS_FEEDS = ['https://www.ceskenoviny.cz/sluzby/rss/zpravy.php'];
+    private const ITEMS_LIMIT = 15;
 
-    /** @var ArticleService */
-    private ArticleService $articleService;
-
-    /** @var string */
-    private string $articleSelector = '.article__text';
-
-    /** @var string[] */
-    private array $rssFeeds = ['http://static.feed.rbc.ru/rbc/logical/footer/news.rss'];
-
-    /** @var int */
-    private int $itemsLimit = 15;
-
-    /**
-     * @param Client $client
-     * @param ArticleService $articleService
-     */
-    public function __construct(Client $client, ArticleService $articleService)
+    public function __construct(private ArticleService $articleService)
     {
-        $this->client = $client;
-        $this->articleService = $articleService;
     }
 
-    /**
-     * @return bool
-     */
     public function parse(): bool
     {
         /** @var SimplePie $feed */
-        $feed = Feeds::make($this->rssFeeds, $this->itemsLimit);
+        $feed = Feeds::make(self::RSS_FEEDS, self::ITEMS_LIMIT);
 
         $errors = $feed->error();
 
@@ -52,18 +33,20 @@ class ArticleParserService
             return false;
         }
 
-        foreach ($feed->get_items() as $item) {
-            $articleModel = $this->articleService->getByGuid($item->get_id());
+        $client = new HttpBrowser(HttpClient::create());
 
-            if ($articleModel) {
+        foreach ($feed->get_items() as $item) {
+            $article = $this->articleService->getByGuid($item->get_id());
+
+            if ($article) {
                 continue;
             }
 
-            $crawler = $this->client->request('GET', $item->get_permalink());
+            $crawler = $client->request('GET', $item->get_permalink());
 
-            $article = $crawler->filter($this->articleSelector);
+            $texts = $crawler->filter(self::SELECTOR)->each(fn($node) => sprintf('<p>%s</p>', $node->text()));
 
-            $this->articleService->create($item, $article);
+            $this->articleService->create($item, implode($texts));
         }
 
         return true;

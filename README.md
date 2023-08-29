@@ -1,3 +1,4 @@
+## Simple articles parser
 ## Installation
 
 - ```composer install```
@@ -10,4 +11,4 @@
 
 ## Demo
 
-http://parser.mlm-developer.ru/
+http://demo.mlm-developer.ru/
